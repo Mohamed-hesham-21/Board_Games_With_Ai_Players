@@ -6,15 +6,18 @@ using namespace std;
 
 
 string opt[] = {
-        "New Game", "Load last game", "Exit"
+        "New Game", "Exit"
 };
 string start[] = {
         "initialize the cells","display the universe","Next Generation","Run for certain number of of moves", "Run until halt", "main menu" , "Exit"
 };
+ifstream taken_board;
 void main_menu();
 void checkmate();
 void play(int x, int y);
 void Game_universe_making();
+void take_from_file();
+bool file=false;
 int main() {
 main_menu();
 }
@@ -23,14 +26,22 @@ void checkmate()
     system("cls");
     cout << "Hope You Enjoyed ^^\n";
     cout << "This Program Was Written By: \n";
-    cout << "Sherif Youssef, Ahmed Yosry, and Mohamed Hesham\n";
+    cout << "Mohamed Hesham and Ahmed Yosry\n";
     cout << "FCAI - CU [2022 - 2026]";
     usleep(INT32_MAX);
 }
 void play(int x, int y)
 {
     Universe game(x, y);
-    while (1) {
+    if(file){
+        for(int i=1; i<= x; i++){
+            for (int j = 1; j <= y; ++j) {
+             taken_board>> game.grid[i][j];
+            }
+        }
+    }
+    game.display();
+    while (true) {
         int op;
         cout << "------------Play-----------\n";
         for (int i = 0; i < 7; i++) {
@@ -77,7 +88,7 @@ void play(int x, int y)
                 cout<<"if u want a delay between generations :\n"
                       "1.No delay\n"
                       "2.custom delay\n";
-                cout<<"--------------------------------";
+                cout<<"--------------------------------\n";
                 while (true){ cout<<"choice : ";
                     cin>>ch;
                     if(ch>0 && ch< 3) break;
@@ -94,9 +105,11 @@ void play(int x, int y)
                 for(int i=0; i<1000 ; i++){
                     system("cls");
                     game.next_generation();
+                    usleep(useconds_t (3 * 1000000));
                 }
+                break;
             }
-            case 6: {
+            default : {
 
                 system("cls");
                 main_menu();
@@ -107,20 +120,23 @@ void play(int x, int y)
 }
 void Game_universe_making(){
     int x,y,op;
-    cout<<"please enter the size of the game's universe u want to make :\n";
+    cout<<"please enter the Size of the game's universe u want to make :\n";
     cout<<"1. 20 rows x 50 columns \n"
           "-----------------------------\n"
           "2. 30 x 30 columns\n"
           "-----------------------------\n"
           "3. 20 x 20\n"
           "-----------------------------\n"
-          "4. custom size\n"
+          "4. custom Size\n"
           "-----------------------------\n"
-          "5. main_menu\n"
-          "-----------------------------\n";
+          "5. load from file\n"
+          "-----------------------------\n"
+          "6. main_menu\n"
+          "-----------------------------\n"
+          ;
     while (true){  cout<<"choice : ";
         cin>>op;
-        if(op<6 && op>0) {
+        if(op<7 && op>0) {
             break;
         }
     }
@@ -148,19 +164,24 @@ void Game_universe_making(){
             play(x, y);
             break;
         }
-        case 5: {
+        case 6: {
             system("cls");
             main_menu();
             return;
+        }
+        default: {
+            take_from_file();
+            break;
         }
     }
 
 }
 void main_menu() {
-    cout << "---------------Game of life-----------------" << endl;
+    cout << "---------------Game of life-----------------\n"
+            "----------- Welcome ya a7la user :) --------" << endl;
     int op;
-    for(int i =0; i < 3 ;i++) {
-        cout <<(i+1)%3 << "." << opt[i] << endl;
+    for(int i =0; i < 2 ;i++) {
+        cout <<(i+1)%2 << "." << opt[i] << endl;
         cout<<"-----------------------------\n";
     }
     while(1){
@@ -171,13 +192,21 @@ void main_menu() {
             Game_universe_making();
             break;
         }
-        else if(op==2){
-            cout<<"this feature is unavailable now please choose another one \n";
-        }
         else if(op==0){
             checkmate();
             return ;
 
         }
     }
+}
+void  take_from_file(){
+string filename;
+int x,y;
+cout<<"enter filename : ";
+cin>>filename;
+taken_board.open(filename);
+taken_board>>x>>y;
+file=true;
+    play(x,y);
+
 }
