@@ -6,9 +6,10 @@ using namespace std;
 class Universe {
 protected:
     int n_cols{}, n_rows{};
-    bool ** grid=nullptr, ** temp=nullptr;
+    bool  ** temp=nullptr;
     int adj_cnt{};
 public:
+    bool** grid=nullptr;
     explicit Universe(int n_cols=0, int n_rows=0);
     void initialize(int num_of_changes);
     void reset();
