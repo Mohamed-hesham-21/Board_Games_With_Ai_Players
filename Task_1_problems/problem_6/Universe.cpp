@@ -72,7 +72,7 @@ void Universe::display() {
     for (int i = 0; i < n_rows; ++i) {
         for (int j = 0; j < n_cols; ++j) {
          if(i==0 || j== 0){
-             cout <<"| "<< i + j  << " |";
+             cout <<"|"<<(j>9?"":" ")<< i + j  << " |";
              continue;
          }
          else  {
@@ -90,7 +90,7 @@ void Universe::display() {
 void Universe::run(int run_for, double delay =0) {
     while(run_for--){
         next_generation();
-        display();
         usleep(useconds_t (delay * 1000000));
+        system("cls");
     }
 }
